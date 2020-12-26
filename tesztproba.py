@@ -2,12 +2,12 @@ import cv2
 import numpy as np
 import pytesseract 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+count=0
+for i in range(100):
 
-for i in range(25):
-
- img=cv2.imread('D://'+str(i+1)+'.jpg')
+ img=cv2.imread('D:\\tesztgepilatas\\'+str(i+1)+'.jpg')
     
- img = cv2.resize(img, (600,400))#kep atmeretezes
+ #img = cv2.resize(img, (600,400))#kep atmeretezes
  #cv2.imshow('resizeolt kep',img)
 
  szurke = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #a szinek atkonvertalasa RGBből szürkébe
@@ -31,7 +31,7 @@ for i in range(25):
  #és leellenőrizni melyiknek van téglalap alakja (négy körvonalból áll és zárt)
  for c in contours:
     kerulet = cv2.arcLength(c, True)#kontúr kerület kiszámítás , masodik argument true tehat zart a körvonal
-    kozelit = cv2.approxPolyDP(c, 0.02*kerulet, True)#0.02 a pontosság mértéke (2%) minel nagyobb ez a szam annal biztosabb hogy eltérő objektumunk van mint amire számitunk
+    kozelit = cv2.approxPolyDP(c, 0.01*kerulet, True)#0.02 a pontosság mértéke (2%) minel nagyobb ez a szam annal biztosabb hogy eltérő objektumunk van mint amire számitunk
   #ha 4 sarka van a korvonalunknak megtaláltuk valószínűleg a rendszámot
     if len(kozelit) == 4: #azok kiválasztása aminek 4 sarka van, len az elemben találat darabszámmal tér vissza
         found= kozelit
@@ -42,7 +42,7 @@ for i in range(25):
     print ("A korvonal nem felismereto.")
     print(str(i+1)+'-------------------------------------')
  else:
-    
+  count+=1 
   imgcpy=cv2.drawContours(img.copy(),[found],-1, (0, 255,0),2) #renszam korberajzolása:-1 az összes kontúr megrajzolását jelenti, zárójelben a szín , utolsó a vastagsága
 
   #maszkolása mindennek ami nem a rendszám
@@ -68,4 +68,5 @@ for i in range(25):
 
   cv2.waitKey(0)
   cv2.destroyAllWindows()
+  print('Az a valamilyen szinten felismertek szama:'+str(count))
   print(str(i+1)+'-------------------------------------')

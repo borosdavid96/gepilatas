@@ -3,7 +3,7 @@ import numpy as np
 import pytesseract 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-img = cv2.imread('D://1.jpg') #kep beolvasás
+img = cv2.imread('D:\\tesztgepilatas\\26.jpg') #kep beolvasás
 cv2.imshow('A sima kep',img)
     
 img = cv2.resize(img, (600,400))#kep atmeretezes
@@ -42,28 +42,28 @@ if found is None: # ha nincs talalat
 else:
     
  imgcpy=cv2.drawContours(img.copy(),[found],-1, (0, 255,0),2) #renszam korberajzolása:-1 az összes kontúr megrajzolását jelenti, zárójelben a szín , utolsó a vastagsága
-cv2.imshow('rendszam mutatasa',imgcpy)
-#maszkolása mindennek ami nem a rendszám
-mask = np.zeros(szurke.shape,np.uint8) #nullakkal feltoltes
-cv2.imshow('maszkolt',mask)
-new_image = cv2.drawContours(mask,[found],0,255,-1,)#fehérrel a rendszámot maszkolja
-cv2.imshow('maszkolt+',mask)
-cv2.imshow('maszkolt1',new_image)
-new_image = cv2.bitwise_and(img,img,mask=mask)
-cv2.imshow('maszkolt2',new_image)
+ cv2.imshow('rendszam mutatasa',imgcpy)
+ #maszkolása mindennek ami nem a rendszám
+ mask = np.zeros(szurke.shape,np.uint8) #nullakkal feltoltes
+ cv2.imshow('maszkolt',mask)
+ new_image = cv2.drawContours(mask,[found],0,255,-1,)#fehérrel a rendszámot maszkolja
+ cv2.imshow('maszkolt+',mask)
+ cv2.imshow('maszkolt1',new_image)
+ new_image = cv2.bitwise_and(img,img,mask=mask)
+ cv2.imshow('maszkolt2',new_image)
 
-(x, y) = np.where(mask ==255)#mivel a maszkoltat módosítja a drawcontour ezért benne marad a fehér maszk, így az összes pixel érték ami fehér (255) értékű a rendszám része
-#két x , y numpi tombbel elmenti a rendszám pozícióját
-(minx, miny) = (np.min(x), np.min(y))#min max pozíciók mentése
-(maxx, maxy) = (np.max(x), np.max(y))
-Cropped = szurke[minx+1:maxx+1, miny+1:maxy+1] #mintol maxig ,így rajzoltat ki
-cv2.imshow('kis cropped',Cropped)
+ (x, y) = np.where(mask ==255)#mivel a maszkoltat módosítja a drawcontour ezért benne marad a fehér maszk, így az összes pixel érték ami fehér (255) értékű a rendszám része
+ #két x , y numpi tombbel elmenti a rendszám pozícióját
+ (minx, miny) = (np.min(x), np.min(y))#min max pozíciók mentése
+ (maxx, maxy) = (np.max(x), np.max(y))
+ Cropped = szurke[minx+1:maxx+1, miny+1:maxy+1] #mintol maxig ,így rajzoltat ki
+ cv2.imshow('kis cropped',Cropped)
 
-#karakter leolvasas
-text = pytesseract.image_to_string(Cropped, config='--psm 11')#11es config ->Sparse text. Find as much text as possible in no particular order.
-print("A rendszam:",text)
-Cropped = cv2.resize(Cropped,(300,150))
-cv2.imshow('vagott kep',Cropped)
+ #karakter leolvasas
+ text = pytesseract.image_to_string(Cropped, config='--psm 11')#11es config ->Sparse text. Find as much text as possible in no particular order.
+ print("A rendszam:",text)
+ Cropped = cv2.resize(Cropped,(300,150))
+ cv2.imshow('vagott kep',Cropped)
 
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+ cv2.waitKey(0)
+ cv2.destroyAllWindows()
