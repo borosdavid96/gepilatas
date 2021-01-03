@@ -2,7 +2,6 @@
 
 Gépi látás tantárgyra beadandó
 Választott téma: Rendszám felismerés
-
 A program python nyelven írdott a választott képet paraméterben kell megadni a programnak.
 Lépései:
 1. Maszkok alkalmazása az élek jobb felismeretősége érdekében
